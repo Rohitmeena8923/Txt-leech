@@ -1,3 +1,21 @@
+# Force time sync using ntplib
+import ntplib
+from datetime import datetime
+import time
+
+def sync_time():
+    try:
+        client = ntplib.NTPClient()
+        response = client.request('pool.ntp.org')
+        ts = response.tx_time
+        datetime_time = datetime.fromtimestamp(ts)
+        print(f"[INFO] NTP time synced: {datetime_time}")
+        time.sleep(1)
+    except Exception as e:
+        print(f"[WARNING] Time sync failed: {e}")
+
+sync_time()
+
 from pyrogram.errors.exceptions.bad_request_400 import StickerEmojiInvalid
 import requests
 import json
@@ -15,7 +33,6 @@ from p_bar import progress_bar
 from subprocess import getstatusoutput
 import helper
 import logging
-import time
 import glob
 import aiohttp
 import asyncio
@@ -58,6 +75,7 @@ bot = Client("bot",
              bot_token=os.environ.get("BOT_TOKEN"),
              api_id=int(os.environ.get("API_ID")),
              api_hash=os.environ.get("API_HASH"))
+
 auth_users = [1091299275,6414266397]
 sudo_users = auth_users
 sudo_groups = [-2429676764]
